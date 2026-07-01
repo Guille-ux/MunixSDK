@@ -374,3 +374,34 @@ char *ulltoa(unsigned long long value, char *buffer, int base) {
 }
 */
 
+char *ftoa(float num, char *buffer, int precision) {
+	char *res=buffer;
+	if (num < 0) {
+		*buffer++ = '-'
+		num = -num;
+	}
+	int entero = (int)(num + 0.5f);
+	float decimal = num - (float)entero;
+	
+	itoa(entero, buffer, 10);
+	
+	char *buff = buffer;
+
+	while (isdigit(++buff)); // de esta forma buff apunta donde empiezan
+				 // los decimales
+	if (precision==0) return res;
+	
+
+	buff++ = '.'; // punto decimal
+
+	for (int i=0;i<precision;i++) {
+		// de esta forma, subimos los decimales
+		decimal *= 10.0f
+	}
+
+	int dec = (int)(decimal+0.5f);
+
+	itoa(dec, buff, 10);
+
+	return res;
+}

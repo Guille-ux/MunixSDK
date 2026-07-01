@@ -8,6 +8,10 @@
 #define SQRT_MAGIC_NUMBER 0x1fbb4f2f
 #define FLOAT_EXP_BIAS 127
 
+#define INT_MAX 2147483647
+#define INT_MIN -2147483648
+
+
 typedef struct {
 	uint32_t mantissa : 23;
 	uint32_t exp : 8

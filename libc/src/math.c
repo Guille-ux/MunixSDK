@@ -151,9 +151,31 @@ float __divsf3(float a, float b) {
 	return result.num;
 }
 
-float __floatsisf(int i);
-float __floatunsisf(unsigned int i);
-int __fixsfsi(float f);
+// TODO: FLOATSISF y FLOATUNSISF.
+
+float __floatsisf(int i) {
+	cast_float_t result;
+}
+
+float __floatunsisf(unsigned int i) {
+	cast_float_t result;
+}
+
+int __fixsfsi(float f) {
+	cast_float_t mid = (cast_float_t)f;
+	int result;
+	if (mid.map.exp > FLOAT_EXP_BIAS) {
+		return 0; // se trunca a 0
+	}
+	if (mid.map.exp > (FLOAT_EXP_BIAS+30)) {
+		return (mid.map.sign==1) INT_MIN : INT_MAX;
+	} else {
+		// un caso normal
+		result = mid.map.mantissa << (mid.map.exp-23) | 1 << mid.map.exp;
+	
+	}
+	return result;
+}
 
 int __eqsf2(float a, float b);
 int __ltsf2(float a, float b);

@@ -28,6 +28,7 @@ char *strdup(const char *str);
 char *ltoa(long value, char *buffer, int base);
 // char *lltoa(long long value, char *buffer, int base);
 char *ultoa(unsigned long value, char *buffer, int base);
+char *ftoa(float num, char *buffer, int precision);
 
 // char *llutoa(unsigned long long value, char *buffer, int base);
 
