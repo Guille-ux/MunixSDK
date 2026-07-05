@@ -32,4 +32,8 @@ char *ftoa(float num, char *buffer, int precision);
 
 // char *llutoa(unsigned long long value, char *buffer, int base);
 
+void *memcpy_to_seg();
+void *memcpy_from_seg();
+void *memcpy_seg();
+
 #endif

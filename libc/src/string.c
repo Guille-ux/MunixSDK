@@ -405,3 +405,36 @@ char *ftoa(float num, char *buffer, int precision) {
 
 	return res;
 }
+
+void memcpy_to_seg(void __seg_fs *dest, const void *src, size_t n) {
+	uint8_t *d=(uint8_t*)dest;
+	const uint8_t *s=(const uint8_t*)src;
+
+	for (size_t i=0;i<n;i++) {
+		d[i]=s[i];
+	}
+
+	return dest;
+}
+
+void memcpy_from_seg(void *dest, const void __seg_fs *src, size_t n) {
+	uint8_t *d=(uint8_t*)dest;
+	const uint8_t *s=(const uint8_t*)src;
+
+	for (size_t i=0;i<n;i++) {
+		d[i]=s[i];
+	}
+
+	return dest;
+}
+
+void memcpy_seg(void __seg_fs *dest, const void __seg_fs *src, size_t n) {
+	uint8_t *d=(uint8_t*)dest;
+	const uint8_t *s=(const uint8_t*)src;
+
+	for (size_t i=0;i<n;i++) {
+		d[i]=s[i];
+	}
+
+	return dest;
+}

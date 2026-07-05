@@ -151,14 +151,64 @@ float __divsf3(float a, float b) {
 	return result.num;
 }
 
-// TODO: FLOATSISF y FLOATUNSISF.
+
 
 float __floatsisf(int i) {
+	// quitamos el signo y lo guardamos en otra parte
+	int sign = (i & (1 << 31));
+	int i = i ^ (sign << 31);
+
+	if (i == 0) return 0;
 	cast_float_t result;
+
+	int pos = 31; // encontrar exponente
+	while (i & (1 << pos)==0) {
+		pos--;
+	}
+
+	int exp = FLOAT_EXP_BIAS + pos;
+
+	// ahora queda crear la mantissa
+	int mantissa;
+
+	if (pos <= 23) {
+		mantissa = i << (23 - pos)
+	} else if (pos > 23) {
+		mantissa = i >> (pos - 23)
+	}
+
+	result.map.mantissa = mantissa;
+	result.map.esp = exp;
+	result.map.sign = sign;
+	
+	return result.num;
 }
 
 float __floatunsisf(unsigned int i) {
+	if (i == 0) return 0;
 	cast_float_t result;
+
+	int pos = 31; // encontrar exponente
+	while (i & (1 << pos)==0) {
+		pos--;
+	}
+
+	int exp = FLOAT_EXP_BIAS + pos;
+
+	// ahora queda crear la mantissa
+	int mantissa;
+
+	if (pos <= 23) {
+		mantissa = i << (23 - pos)
+	} else if (pos > 23) {
+		mantissa = i >> (pos - 23)
+	}
+
+	result.map.mantissa = mantissa;
+	result.map.esp = exp;
+	result.map.sign = 0;
+	
+	return result.num;
 }
 
 int __fixsfsi(float f) {

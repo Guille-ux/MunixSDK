@@ -3,6 +3,7 @@
 
 #include <sys.h>
 #include <far.h> // ya no es necesario pero se queda x si acaso
+#include <vga.h>
 
 #define _SYS_SCREEN_FD 1
 #define _SYS_KEYBOARD_FD 0
@@ -15,12 +16,21 @@ extern uint16_t __seg_fs *_screen;
 extern int _cursor_x;
 extern int _cursor_y;
 
-int init_stdio();
+extern uint8_t _color;
 
-// Screen Special Def's
-#define VGA_HEIGHT 25
-#define VGA_WIDTH 80
-#define VGA_DEFAULT_COLOR 0x07
+int init_stdio();
+int refresh(); // escribe a la pantalla el buffer
+
+// Screen Utils
+
+int putch(char ch, int x, int y);
+int print_string(const char *string, int x, int y);
+void setcur(int x, int y);
+void scroll();
+
+// Screen Funcs, (things like printf, putchar)
+void putchar(char c);
+
 
 // Keyboard Special Def's
 
