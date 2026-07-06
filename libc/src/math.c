@@ -227,6 +227,47 @@ int __fixsfsi(float f) {
 	return result;
 }
 
-int __eqsf2(float a, float b);
-int __ltsf2(float a, float b);
-int __gtsf2(float a, float b);
+int __eqsf2(float a, float b) {
+	cast_float_t ca = (cast_float_t)a;
+	cast_float_t cb = (cast_float_t)b;
+
+	if (IS_ZERO(a) && IS_ZERO(b)) {
+		return 1;
+	}
+	
+	if (IS_NAN(a) || IS_NAN(b)) {
+		return 0;
+	}
+
+	return ca.raw == cb.raw;
+}
+
+int __ltsf2(float a, float b) {
+	cast_float_t ca = (cast_float_t)a;
+	cast_float_t cb = (cast_float_t)b;
+
+	if (IS_NAN(a) || IS_NAN(b)) {
+		return 0;
+	}
+	
+	if (IS_ZERO(a) && IS_ZERO(b)) {
+		return 0;
+	}
+
+	if (IS_NEG(a) && !IS_NEG(b)) {
+		return 1;
+	} else if (IS_NEG(b) && !IS_NEG(a)) {
+		return 0;
+	} else if (!IS_NEG(b)) {
+		return ca.raw > cb.raw;
+	} else {
+		return ca.raw < cb.raw;
+	}
+
+	return 0;
+
+}
+
+int __gtsf2(float a, float b) {
+	return __ltsf2(b, a);
+}
