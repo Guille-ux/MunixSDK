@@ -227,6 +227,10 @@ int __fixsfsi(float f) {
 	return result;
 }
 
+unsigned int __fixunssfsi(float f) {
+	return (unsigned int)(__fixsfsi(f) & (~(1 << 31)));
+}
+
 int __eqsf2(float a, float b) {
 	cast_float_t ca = (cast_float_t)a;
 	cast_float_t cb = (cast_float_t)b;
@@ -270,4 +274,124 @@ int __ltsf2(float a, float b) {
 
 int __gtsf2(float a, float b) {
 	return __ltsf2(b, a);
+}
+
+float invFastSqrt(float num) {
+	cast_float_t aprox;
+	aprox.num = num;
+	aprox.raw = (aprox.raw >> 1) + SQRT_MAGIC_NUMBER;
+	float tmp;
+	
+	tmp = num / aprox.num; // calculamos el otro lado del cuadrado
+
+	// promediamos con el lado actual
+	aprox.num = (aprox.num + tmp) / 2;
+
+	return aprox.num;
+}
+
+float clamp(float num, float min, float max) {
+	if (num > max) return max;
+	if (num < min) return min;
+	return num;
+}
+
+float wrapAngle(float angle) {
+	int vueltas = (int)(angle/360.0f);
+	angle = angle - ((float)vueltas*360.0f);
+	if (IS_NEG(angle)) angle = angle + 360.0f;
+	return angle;
+}
+
+int _vec_fast = 0;
+
+Vec2 normalize(Vec2 vec) {
+	float len = vlength(vec);
+	return (Vec2){vec.x/len, vec.y/len};
+}
+
+float vlength(Vec2 vec) {
+	return (_vec_fast) ? invFastSqrt(vec.x*vec.x+vec.y*vec.y) : sqrt(vec.x*vec.x+vec.y*vec.y);
+}
+
+Vec2 vadd(Vec2 a, Vec2 b) {
+	return (Vec2){a.x+b.x, a.y+b.y};
+}
+
+Vec2 vsub(Vec2 a, Vec2 b) {
+	return (Vec2){a.x-b.x, a.y-b.y};
+}
+
+float sin(float angle) {
+	if (IS_NAN(angle) || IS_INFINITE(angle)) return NaN;
+	if (IS_NEG(angle)) angle = -angle;
+	
+	angle = wrapAngle(angle);
+
+	if (angle > 90) {
+		int a = (int)(angle/90.0f);
+		angle = (angle - (float)(a*90))
+		angle = (a & 1) ? 90.0f - angle : angle;
+	}
+
+	if (angle == 90) return 0;
+	if (angle == 0) return 1;
+
+	float asup = 90.0f;
+	float ainf = 0.0f;
+
+	Vec2 sup = {0, 1}; // angulo 90º
+	Vec2 inf = {1, 0}; // angulo 0º
+	
+	Vec2 tmp;
+
+	for (int i=0;i<SIN_COS_ITERATIONS;i++) {
+		tmp = normalize(vadd(sup, inf));
+		if (angle > tmp) {
+			inf = tmp;
+			ainf = asup / 2.0f;
+		} else {
+			sup = tmp;
+			asup = asup / 2.0f;
+		}
+	}
+
+	return tmp.y;
+}
+
+float cos(float angle) {
+	if (IS_NAN(angle) || IS_INFINITE(angle)) return NaN;
+	if (IS_NEG(angle)) angle = -angle;
+	
+	angle = wrapAngle(angle);
+
+	if (angle > 90) {
+		int a = (int)(angle/90.0f);
+		angle = (angle - (float)(a*90))
+		angle = (a & 1) ? 90.0f - angle : angle;
+	}
+
+	if (angle == 90) return 1;
+	if (angle == 0) return 0;
+
+	float asup = 90.0f;
+	float ainf = 0.0f;
+
+	Vec2 sup = {0, 1}; // angulo 90º
+	Vec2 inf = {1, 0}; // angulo 0º
+	
+	Vec2 tmp;
+
+	for (int i=0;i<SIN_COS_ITERATIONS;i++) {
+		tmp = normalize(vadd(sup, inf));
+		if (angle > tmp) {
+			inf = tmp;
+			ainf = asup / 2.0f;
+		} else {
+			sup = tmp;
+			asup = asup / 2.0f;
+		}
+	}
+
+	return tmp.x;
 }
