@@ -12,6 +12,7 @@ extern int _screen_fd;
 extern int _keyboard_fd;
 
 extern uint16_t __seg_fs *_screen;
+extern uint16_t __seg_fs *_kb_buffer;
 
 extern int _cursor_x;
 extern int _cursor_y;
@@ -31,6 +32,9 @@ void scroll();
 // Screen Funcs, (things like printf, putchar)
 void putchar(char c);
 
+
+// keyboard funcs
+uint16_t getchar(); // returns the last key event on the kernel buffer
 
 // Keyboard Special Def's
 

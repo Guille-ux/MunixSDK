@@ -6,7 +6,10 @@
 int _screen_fd = -1;
 int _keyboard_fd = -1;
 
+
 uint16_t __seg_fs *_screen=NULL;
+uint16_t kbb;
+uint16_t __seg_fs *_kb_buffer=(uint16_t __seg_fs*)(where+(uint32_t)&kbb);// length 1
 
 int _cursor_x=0;
 int _cursor_y=0;
@@ -294,4 +297,9 @@ int printf(const char *format, ...) {
 
 	va_end(args);
 	return 0;
+}
+
+uint16_t getchar() {
+	_read(_keyboard_fd, _kb_buffer, 1);
+	return *_kb_buffer;
 }
