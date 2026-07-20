@@ -19,7 +19,7 @@ int _open(char *name); // name relative to the far ptr
 int _close(int fd);
 int _name(char *name);
 int _release_mem();
-void *_register_mem(int hmp);
+void __seg_fs *_register_mem(int hmp);
 int _read(int fd, void *buffer, uint32_t size);
 int _write(int fd, void *buffer, uint32_t size);
 int _spawn(uint32_t ram_amount, void *blob, uint32_t length, uint32_t start_pos); 
