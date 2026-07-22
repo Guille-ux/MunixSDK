@@ -4,7 +4,7 @@
 
 
 static void __seg_fs *initBlock(size_t size, _block_meta_t __seg_fs *next);
-static int initSbrkBlock(int index);
+static int initSbrkBlock(int index, size_t size);
 
 _block_meta_t *_block_pool = NULL;
 _mem_pool_t _memory_pool[SBRK_MAX_ALLOCATION];
@@ -14,13 +14,15 @@ int initMemSys() {
 	memset(_memory_pool, 0, sizeof(_memory_pool));
 }
 
-static int initSbrkBlock(int index) {
-	void __seg_fs *new_block = _register_mem(SBRK_NEW_BLOCK_SIZE);
+static int initSbrkBlock(int index, size_t size) {
+	size_t final_size = (size > PAGE_SIZE*SBRK_NEW_BLOCK_SIZE) ? size / PAGE_SIZE + 1 : SBRK_NEW_BLOCK_SIZE;
+
+	void __seg_fs *new_block = _register_mem(final_size);
 	if (new_block == NULL) return -1;
 	
 	_memory_pool[index].base = new_block;
 	_memory_pool[index].ptr = new_block;
-	_memory_pool[index].size = PAGE_SIZE*SBRK_NEW_BLOCK_SIZE;
+	_memory_pool[index].size = final_size * PAGE_SIZE;
 	_memory_pool[index].full = false;
 	
 	how_many_blocks++;
@@ -31,14 +33,13 @@ static int initSbrkBlock(int index) {
 void __seg_fs *sbrk(size_t size) {
 	if (_memory_pool[0] == NULL) {
 		// add more memory
-		initSbrkBlock(0);
+		initSbrkBlock(0, size);
 	}
-	int final_index;
 	for (int i=0;i<SBRK_MAX_ALLOCATION;i++) {
 		if ((size + ((size_t)_memory_pool[i].ptr - (size_t)_memory_pool[i].base)) > size || _memory_pool[i].full) { // oh no, there isn't enough memory
 			if (_memory_pool[i+1].base != NULL) continue;
 			if (i>=SBRK_MAX_ALLOCATION) return NULL;
-			initSbrkBlock(++i);
+			initSbrkBlock(++i, size);
 			final_index = i;
 			break;
 		} else {
