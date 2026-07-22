@@ -1,10 +1,12 @@
 #include <sys.h>
-
+#include <mem.h>
 
 uint32_t where;
 
 void _init() {
+	// here is all the initialization code
 	where = sys_whoami();
+	initMemSys();
 }
 
 void _exit() {

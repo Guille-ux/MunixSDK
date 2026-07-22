@@ -46,10 +46,10 @@ typedef struct _mem_pool {
 } __attribute__((packed)) _mem_pool_t;
 
 // structs for malloc and free
+// no uso el valor free xq si esta en la lista no lo necesitamos
 typedef struct _block_meta {
 	size_t size;
 	struct _block_meta __seg_fs *next;
-	bool free;
 } __attribute__((packed)) _block_meta_t;
 
 #define META_SIZE sizeof(_block_meta_t)
