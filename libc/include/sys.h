@@ -26,6 +26,7 @@ int _spawn(uint32_t ram_amount, void *blob, uint32_t length, uint32_t start_pos)
 void _wait();
 int _get_pid();
 void _kill(int pid);
+int _extend(int fd);
 
 // 1 if program's own memory or 0 if far pointer (at m)
 void _ipc_send(int pid, msg_t *message, bool m);
@@ -54,6 +55,6 @@ int _searchPid(char *name);
 #define _IPC_RECEIVE_ 0x04
 #define _AWAKE_ 0x05
 #define _SEARCH_PID_ 0x19
-
+#define _EXTEND_ 0x0A
 
 #endif

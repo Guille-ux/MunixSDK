@@ -80,3 +80,7 @@ void _awake(int pid) {
 int _searchPid(char *name) {
 	return _sys(_SEARCH_PID_, (int)name, 0, 0, 0);
 }
+
+int _extend(int fd) {
+	return _sys(_EXTEND_, fd, 0, 0, 0);
+}
