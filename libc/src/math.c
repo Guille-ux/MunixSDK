@@ -324,50 +324,17 @@ Vec2 vsub(Vec2 a, Vec2 b) {
 
 float sin(float angle) {
 	if (IS_NAN(angle) || IS_INFINITE(angle)) return NaN;
-	if (IS_NEG(angle)) angle = -angle;
-	
+	float sign=1;
+	if (IS_NEG(angle)) { 
+		angle = -angle;
+		sign = -1;
+	}
+
 	angle = wrapAngle(angle);
 
 	if (angle > 90) {
 		int a = (int)(angle/90.0f);
-		angle = (angle - (float)(a*90))
-		angle = (a & 1) ? 90.0f - angle : angle;
-	}
-
-	if (angle == 90) return 0;
-	if (angle == 0) return 1;
-
-	float asup = 90.0f;
-	float ainf = 0.0f;
-
-	Vec2 sup = {0, 1}; // angulo 90º
-	Vec2 inf = {1, 0}; // angulo 0º
-	
-	Vec2 tmp;
-
-	for (int i=0;i<SIN_COS_ITERATIONS;i++) {
-		tmp = normalize(vadd(sup, inf));
-		if (angle > tmp) {
-			inf = tmp;
-			ainf = asup / 2.0f;
-		} else {
-			sup = tmp;
-			asup = asup / 2.0f;
-		}
-	}
-
-	return tmp.y;
-}
-
-float cos(float angle) {
-	if (IS_NAN(angle) || IS_INFINITE(angle)) return NaN;
-	if (IS_NEG(angle)) angle = -angle;
-	
-	angle = wrapAngle(angle);
-
-	if (angle > 90) {
-		int a = (int)(angle/90.0f);
-		angle = (angle - (float)(a*90))
+		angle = (angle - (float)(a*90));
 		angle = (a & 1) ? 90.0f - angle : angle;
 	}
 
@@ -381,10 +348,49 @@ float cos(float angle) {
 	Vec2 inf = {1, 0}; // angulo 0º
 	
 	Vec2 tmp;
+	float tmp2;
 
 	for (int i=0;i<SIN_COS_ITERATIONS;i++) {
-		tmp = normalize(vadd(sup, inf));
-		if (angle > tmp) {
+		tmp2 = normalize(vadd(sup, inf));
+		if (angle > tmp2) {
+			inf = tmp;
+			ainf = asup / 2.0f;
+		} else {
+			sup = tmp;
+			asup = asup / 2.0f;
+		}
+	}
+
+	return tmp.y * sign;
+}
+
+float cos(float angle) {
+	if (IS_NAN(angle) || IS_INFINITE(angle)) return NaN;
+	if (IS_NEG(angle)) angle = -angle;
+	
+	angle = wrapAngle(angle);
+
+	if (angle > 90) {
+		int a = (int)(angle/90.0f);
+		angle = (angle - (float)(a*90));
+		angle = (a & 1) ? 90.0f - angle : angle;
+	}
+
+	if (angle == 90) return 1;
+	if (angle == 0) return 0;
+
+	float asup = 90.0f;
+	float ainf = 0.0f;
+
+	Vec2 sup = {0, 1}; // angulo 90º
+	Vec2 inf = {1, 0}; // angulo 0º
+	
+	Vec2 tmp;
+	float tmp2;
+
+	for (int i=0;i<SIN_COS_ITERATIONS;i++) {
+		tmp2 = normalize(vadd(sup, inf));
+		if (angle > tmp2) {
 			inf = tmp;
 			ainf = asup / 2.0f;
 		} else {
