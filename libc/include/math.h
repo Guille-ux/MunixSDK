@@ -100,4 +100,6 @@ static inline float vdot(Vec2 a, Vec2 b) {
 float sin(float angle);
 float cos(float angle);
 
+float fasbf(float num);
+
 #endif

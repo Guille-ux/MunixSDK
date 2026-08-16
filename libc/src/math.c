@@ -395,3 +395,7 @@ float cos(float angle) {
 
 	return tmp.x;
 }
+
+float fasbf(float num) {
+	return num & ~FLT_SIGN;
+}
