@@ -15,7 +15,7 @@
 #define PI 3.141592f
 
 #define N_SQRT_ITERATIONS 5
-#define SQRT_MAGIC_NUMBER 0x1fbb4f2f
+#define SQRT_MAGIC_NUMBER 0x5f3759df 
 #define FLOAT_EXP_BIAS 127
 
 #define INT_MAX 2147483647
