@@ -84,3 +84,7 @@ int _searchPid(char *name) {
 int _extend(int fd) {
 	return _sys(_EXTEND_, fd, 0, 0, 0);
 }
+
+int _remove(char *name) {
+	return _sys(_REMOVE_, (int)name, 0, 0, 0);
+}
