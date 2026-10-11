@@ -405,3 +405,20 @@ float cos(float angle) {
 float fasbf(float num) {
 	return num & ~FLT_SIGN;
 }
+
+float ln(b) {
+	float_map_t f_map = (float_map_t)b;
+	int e = f_map.exp-FLOAT_EXP_BIAS;
+	
+	uint32_t mantissa_b = f_map.mantissa;
+	
+	float z = (float)(mantissa_b - 1)/(float)(mantissa_b + 1);
+
+	float log_b = 2*z * (1 + z*z * (1/3 + z*z *(1/5+z*z/7)));
+
+	return log_b + (float)e * LN_OF_TWO;
+}
+
+float log(a, b) {
+	return ln(b)/ln(a);
+}

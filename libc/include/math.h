@@ -36,6 +36,8 @@
 #define IS_NEG(num) (num & (1<<31))
 
 #define SIN_COS_ITERATIONS 12
+#define LN_OF_TWO 0.69314718056f
+
 
 /*
  * nota: es 0 cuando todo esta a 0, aunque el signo puede ser 1
@@ -62,6 +64,9 @@ typedef struct {
 	float x;
 	float y;
 } Vec2;
+
+float log(a, b);
+float ln(a);
 
 float sqrt(float num);
 
