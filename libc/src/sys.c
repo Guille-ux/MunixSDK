@@ -88,3 +88,7 @@ int _extend(int fd) {
 int _remove(char *name) {
 	return _sys(_REMOVE_, (int)name, 0, 0, 0);
 }
+
+int _pwd(char *path) {
+	return _sys(_PWD_, (int)path, 0, 0, 0);
+}

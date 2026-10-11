@@ -27,7 +27,9 @@ void _wait();
 int _get_pid();
 void _kill(int pid);
 int _extend(int fd);
-int remove(char *name);
+int _remove(char *name);
+int _pwd(char *path);
+
 
 // 1 if program's own memory or 0 if far pointer (at m)
 void _ipc_send(int pid, msg_t *message, bool m);
@@ -58,5 +60,6 @@ int _searchPid(char *name);
 #define _SEARCH_PID_ 0x19
 #define _EXTEND_ 0x0A
 #define _REMOVE_ 0x0B
+#define _PWD_ 0x18
 
 #endif
