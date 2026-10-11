@@ -419,6 +419,8 @@ float ln(b) {
 	return log_b + (float)e * LN_OF_TWO;
 }
 
+// this should work right?
+
 float log(a, b) {
 	return ln(b)/ln(a);
 }
